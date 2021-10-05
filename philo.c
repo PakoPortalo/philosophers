@@ -6,7 +6,7 @@
 /*   By: fportalo <fportalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 13:27:01 by fportalo          #+#    #+#             */
-/*   Updated: 2021/10/04 13:02:47 by fportalo         ###   ########.fr       */
+/*   Updated: 2021/10/05 13:30:17 by fportalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,23 @@ int	check_loop(t_params *params, t_philosopher *philo)
 	i = 0;
 	while(params->is_dead == 0)
 	{
-		all_dead(philo);
+		if (i > philo->params.num)
+			i = 0;
+		//fprintf(stderr, "%llu -- %llu\n, ", philo[i].last_eat, get_time() - philo[i].last_eat);
+
+		if (philo[i].last_eat != 0 && (get_time() - philo[i].last_eat) > params->die)
+		{
+			params->is_dead = 1;
+			printer(philo, DIE);
+			return (-1);
+		}
+		//if (philo[i].last_eat > philo->params.die)
+		//{
+		//	all_dead(philo);
+		//	return (-1);
+		//}
+		i++;
+
 		//printf("hola");
 	}
 	return (-1);

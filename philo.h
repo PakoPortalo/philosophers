@@ -50,6 +50,8 @@ int			ft_usleep(uint64_t time, t_philosopher *philo);
 uint64_t	get_time(void );
 void		*philo_routine(void *arg);
 uint64_t	get_time_sub(uint64_t subtraction);
+int			printer(t_philosopher *philo, int choose);
+
 
 
 #endif

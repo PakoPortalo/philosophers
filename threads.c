@@ -6,7 +6,7 @@
 /*   By: fportalo <fportalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/30 16:07:49 by fportalo          #+#    #+#             */
-/*   Updated: 2021/10/04 13:02:06 by fportalo         ###   ########.fr       */
+/*   Updated: 2021/10/05 13:12:53 by fportalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ void	philo_data(t_params *params, t_philosopher *philo, int i)
 	philo->ini_start = &params->ini_start;
 	philo->printer = &params->printer;
 	philo->is_dead = &params->is_dead;
+	philo->last_eat = 0;
 }
 
 void	ini_threads(t_params *params, t_philosopher *philo)

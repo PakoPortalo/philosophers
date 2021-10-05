@@ -6,7 +6,7 @@
 /*   By: fportalo <fportalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/30 16:28:19 by fportalo          #+#    #+#             */
-/*   Updated: 2021/10/04 13:06:00 by fportalo         ###   ########.fr       */
+/*   Updated: 2021/10/05 13:27:34 by fportalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,13 @@ int		printer(t_philosopher *philo, int choose)
 
 int		eating(t_philosopher *philo)
 {
-	//philo->last_eat = get_time();
 	if (philo->id % 2 == 1)
 	{
 		pthread_mutex_lock(philo->stick_l);
 		printer(philo, TAKEN);
 		pthread_mutex_lock(philo->stick_r);
 		printer(philo, TAKEN);
+		usleep(10);
 	}
 	else
 	{
@@ -57,20 +57,14 @@ int		eating(t_philosopher *philo)
 		ft_usleep((philo->params.die), philo);
 		printer(philo, DIE);
 		*philo->is_dead = 1;
-		//exit (0);
 		return(-1);
 	}
+
+	philo->last_eat = get_time();
 	printer(philo, EAT);
 	ft_usleep(philo->params.eat, philo);
 	pthread_mutex_unlock(philo->stick_l);
 	pthread_mutex_unlock(philo->stick_r);
-
-	//if (philo->last_meal > philo->params.philo_die)
-	//{
-	//	printer(philo, 7);					// 7 = dead
-	//	return(-1);
-	//}
-
 	return (0);
 }
 
@@ -79,12 +73,12 @@ int		sleeping(t_philosopher *philo)
 		printer(philo, SLEEP);
 		if (philo->params.die < philo->params.eat + philo->params.sleep)
 		{
-			usleep((philo->params.die - philo->params.eat) * 1000);
+			ft_usleep((philo->params.die - philo->params.eat), philo);
 			printer(philo, DIE);
 			*philo->is_dead = 1;
 			return(-1);
 		}
-		usleep(philo->params.sleep);
+		ft_usleep(philo->params.sleep, philo);
 		return(0);
 }
 
@@ -95,18 +89,22 @@ void		thinking(t_philosopher *philo)
 
 void	*philo_routine(void *arg)
 {
-	t_philosopher	philo;
+	t_philosopher	*philo;
 
-	philo = *(t_philosopher *)arg;
-	while(*philo.is_dead == 0) // while(philo.params.eats != 0)
+	philo = (t_philosopher *)arg;
+	philo->last_eat = philo->params.ini_start;
+	while(*philo->is_dead == 0)
 	{
-		//if (philo.is_dead == 1)
+		//if(get_time() - philo.last_eat > philo.params.die)
+		//{
+		//	*philo.is_dead = 1;
 		//	break;
-		if (eating(&philo) == -1)
-			break;
-		if (sleeping(&philo) == -1)
-			break;
-		thinking(&philo);
+		//}
+		if (eating(philo) == -1)
+			return(NULL);
+		if (sleeping(philo) == -1)
+			return(NULL);
+		thinking(philo);
 	}
 	return (NULL);
 }
