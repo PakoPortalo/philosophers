@@ -6,7 +6,7 @@
 /*   By: fportalo <fportalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/30 16:07:49 by fportalo          #+#    #+#             */
-/*   Updated: 2021/10/05 13:12:53 by fportalo         ###   ########.fr       */
+/*   Updated: 2021/10/06 15:35:20 by fportalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	philo_data(t_params *params, t_philosopher *philo, int i)
 	philo->params.die = params->die;
 	philo->params.eat = params->eat;
 	philo->params.sleep = params->sleep;
-	philo->params.number_eats = params->number_eats;
+	philo->params.num_eats = params->num_eats;
 	philo->ini_start = &params->ini_start;
 	philo->printer = &params->printer;
 	philo->is_dead = &params->is_dead;

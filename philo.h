@@ -21,7 +21,7 @@ typedef struct	s_params {
 	uint64_t			die;
 	uint64_t			eat;
 	uint64_t			sleep;
-	int					number_eats;
+	int					num_eats;
 	pthread_mutex_t		*stick;
 	pthread_mutex_t		printer;
 	pthread_t			*threads;

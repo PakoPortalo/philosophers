@@ -6,7 +6,7 @@
 /*   By: fportalo <fportalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/30 16:28:19 by fportalo          #+#    #+#             */
-/*   Updated: 2021/10/05 13:27:34 by fportalo         ###   ########.fr       */
+/*   Updated: 2021/10/06 15:41:07 by fportalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,12 @@
 int		printer(t_philosopher *philo, int choose)
 {
 	pthread_mutex_lock(philo->printer);
-	if (*philo->is_dead == 0 && philo->params.number_eats != 0)
+	if (*philo->is_dead == 0 && philo->params.num_eats != 0)
 	{
 		if (choose == TAKEN)
 			printf("[%llu]Philosopher %d has taken a fork\n", get_time_sub(*philo->ini_start) , philo->id);
 		else if (choose == EAT)
-			printf("[%llu]Philosopher %d is eating\n", get_time_sub(*philo->ini_start), philo->id);
+			printf("[\033[0;32m%llu\033[0;37m]Philosopher %d is \033[0;32meating\033[0;37m\n", get_time_sub(*philo->ini_start), philo->id);
 		else if (choose == SLEEP)
 			printf("[%llu]Philosopher %d is sleeping\n", get_time_sub(*philo->ini_start), philo->id);
 		else if (choose == THINK)
@@ -43,7 +43,7 @@ int		eating(t_philosopher *philo)
 		printer(philo, TAKEN);
 		pthread_mutex_lock(philo->stick_r);
 		printer(philo, TAKEN);
-		usleep(10);
+		//usleep(10);
 	}
 	else
 	{
@@ -55,7 +55,7 @@ int		eating(t_philosopher *philo)
 	if (philo->params.eat > philo->params.die)
 	{
 		ft_usleep((philo->params.die), philo);
-		printer(philo, DIE);
+		// printer(philo, DIE);
 		*philo->is_dead = 1;
 		return(-1);
 	}
@@ -74,7 +74,6 @@ int		sleeping(t_philosopher *philo)
 		if (philo->params.die < philo->params.eat + philo->params.sleep)
 		{
 			ft_usleep((philo->params.die - philo->params.eat), philo);
-			printer(philo, DIE);
 			*philo->is_dead = 1;
 			return(-1);
 		}
