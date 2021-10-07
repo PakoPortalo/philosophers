@@ -6,7 +6,7 @@
 /*   By: fportalo <fportalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 13:27:01 by fportalo          #+#    #+#             */
-/*   Updated: 2021/10/06 15:47:42 by fportalo         ###   ########.fr       */
+/*   Updated: 2021/10/07 13:14:07 by fportalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,14 +79,16 @@ int	check_loop(t_params *params, t_philosopher *philo)
 	i = 0;
 	while(params->is_dead == 0 || params->num_eats)
 	{
-		if (i > philo->params.num)
+		if (i >= philo->params.num)
 			i = 0;
 		//fprintf(stderr, "%llu -- %llu\n, ", philo[i].last_eat, get_time() - philo[i].last_eat);
 
 		if (philo[i].last_eat != 0 && (get_time() - philo[i].last_eat) > params->die)
 		{
 			params->is_dead = 1;
-			// printf("Philo %d Last eat: %llu\n", philo[i].id, get_time() - philo[i].last_eat);
+			printf("Get Time: %llu\n", (get_time()));
+			printf("Last Eat: %llu\n", (philo[i].last_eat));
+			printf("La maldita resta es: %llu\n", (get_time() - philo[i].last_eat));
 			printf("[\033[0;31m%llu\033[0;37m]Philosopher %d \033[0;31mdied\033[0;37m\n", get_time_sub(*philo->ini_start), philo[i].id);
 			return (-1);
 		}

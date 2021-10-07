@@ -6,7 +6,7 @@
 /*   By: fportalo <fportalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/30 16:07:49 by fportalo          #+#    #+#             */
-/*   Updated: 2021/10/06 15:35:20 by fportalo         ###   ########.fr       */
+/*   Updated: 2021/10/07 13:16:04 by fportalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	philo_data(t_params *params, t_philosopher *philo, int i)
 	philo->ini_start = &params->ini_start;
 	philo->printer = &params->printer;
 	philo->is_dead = &params->is_dead;
-	philo->last_eat = 0;
+	philo->last_eat = params->ini_start;
 }
 
 void	ini_threads(t_params *params, t_philosopher *philo)
@@ -61,7 +61,9 @@ void	ini_threads(t_params *params, t_philosopher *philo)
 
 	i = 0;
 	init_sticks(params);
+	pthread_mutex_lock(philo->printer);
 	params->ini_start = get_time();
+	pthread_mutex_unlock(philo->printer);
 	while (i < params->num)
 	{
 		set_sticks(params, &philo[i], i);
