@@ -6,7 +6,7 @@
 /*   By: fportalo <fportalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/30 16:28:19 by fportalo          #+#    #+#             */
-/*   Updated: 2021/10/07 13:16:04 by fportalo         ###   ########.fr       */
+/*   Updated: 2021/10/07 13:43:56 by fportalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,13 @@ int		printer(t_philosopher *philo, int choose)
 
 int		eating(t_philosopher *philo)
 {
+	if (philo->params.num == 1)
+	{
+		printer(philo, TAKEN);
+		ft_usleep(philo->params.die, philo);
+		*philo->is_dead = 1;
+		return (-1);
+	}
 	if (philo->id % 2 == 1)
 	{
 		pthread_mutex_lock(philo->stick_l);
@@ -91,7 +98,7 @@ void	*philo_routine(void *arg)
 
 	philo = (t_philosopher *)arg;
 	if (philo->id % 2 == 1)
-		ft_usleep(10, philo);
+		usleep(20);
 	while(*philo->is_dead == 0)
 	{
 		//if(get_time() - philo.last_eat > philo.params.die)
