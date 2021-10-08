@@ -6,7 +6,7 @@
 /*   By: fportalo <fportalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/30 16:07:49 by fportalo          #+#    #+#             */
-/*   Updated: 2021/10/08 11:25:18 by fportalo         ###   ########.fr       */
+/*   Updated: 2021/10/08 12:38:19 by fportalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,7 @@ void	ini_threads(t_params *params, t_philosopher *philo)
 
 	i = 0;
 	init_sticks(params);
-	pthread_mutex_lock(philo->printer);
 	params->ini_start = get_time();
-	pthread_mutex_unlock(philo->printer);
 	while (i < params->num)
 	{
 		set_sticks(params, &philo[i], i);

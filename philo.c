@@ -6,7 +6,7 @@
 /*   By: fportalo <fportalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 13:27:01 by fportalo          #+#    #+#             */
-/*   Updated: 2021/10/08 11:29:41 by fportalo         ###   ########.fr       */
+/*   Updated: 2021/10/08 12:37:34 by fportalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,21 +40,6 @@ int	get_params(int argc, char **argv, t_params *params)
 	return (0);
 }
 
-void	alloc_memory(t_params *params, t_philosopher *philo)
-{
-	params->stick = malloc(sizeof(pthread_mutex_t) * params->num);
-	philo->printer = malloc(sizeof(pthread_mutex_t) * params->num);
-	params->threads = malloc(sizeof(pthread_t) * params->num);
-}
-
-void	free_memory(t_params *params, t_philosopher *philo)
-{
-	//free(params->stick);
-	//free(philo->printer);
-	free(params->threads);
-	free(philo);
-}
-
 void	join_threads(t_params *params)
 {
 	int	i;
@@ -67,39 +52,22 @@ void	join_threads(t_params *params)
 	}
 }
 
-//void	ciao_mutex(t_philosopher *philo)
-//{
-//	int i;
-
-//	i = 0;
-//	pthread_mutex_unlock(philo->printer);
-//	while (i <= philo->params.num)
-//	{
-//		pthread_mutex_unlock(philo[i].stick_l);
-//		i++;
-//	}
-//}
-
-int	check_full(t_params *params, t_philosopher *philo)
+int	check_die(t_params *params, t_philosopher *philo, int i)
 {
-	int i;
-	int j;
-
-	i = 0;
-	j = 0;
-	while (i < params->num)
+	if (philo[i].last_eat != 0 && \
+		(get_time() - philo[i].last_eat) > params->die)
 	{
-		if (philo[i].full == 1)
-		{
-			j++;
-		}
-			i++;
+		params->is_dead = 1;
+		printf("[%llu]Philosopher %d died\n", \
+		get_time_sub(*philo->ini_start), philo[i].id);
+		return (-1);
 	}
-	//if (j == params->num)
-	//{
-	//	ciao_mutex(philo);
-	//	return (-1);
-	//}
+	if (params->is_dead == 1)
+	{
+		printf("[%llu]Philosopher %d died\n", \
+			get_time_sub(*philo->ini_start), philo[i].id);
+		return (-1);
+	}
 	return (0);
 }
 
@@ -112,30 +80,17 @@ int	check_loop(t_params *params, t_philosopher *philo)
 	{
 		if (philo[i].full == 0)
 		{
-
 			if (i >= philo->params.num)
 				i = 0;
-			if (philo->full == 1)
-				break;
-			if (philo[i].last_eat != 0 && \
-				(get_time() - philo[i].last_eat) > params->die)
-			{
-				params->is_dead = 1;
-				printf("[%llu]Philosopher %d died\n", \
-					get_time_sub(*philo->ini_start), philo[i].id);
+			if (philo[i].full == 1)
+				break ;
+			if (check_die(params, philo, i) == -1)
 				return (-1);
-			}
-			if (params->is_dead == 1)
-			{
-				printf("[%llu]Philosopher %d died\n", \
-					get_time_sub(*philo->ini_start), philo[i].id);
-				return (-1);
-			}
 		}
 		i++;
 	}
 	if (check_full(params, philo) == -1)
-		return(-1);
+		return (-1);
 	return (-1);
 }
 
@@ -151,11 +106,9 @@ int	main(int argc, char *argv[])
 	if (get_params(argc, argv, &params) == -1)
 		return (-1);
 	philo = malloc(sizeof(t_philosopher) * params.num);
-	alloc_memory(&params, philo);
+	alloc_memory(&params);
 	ini_threads(&params, philo);
 	check_loop(&params, philo);
 	join_threads(&params);
-	free_memory(&params, philo);
-	//system("leaks philo");
 	return (0);
 }

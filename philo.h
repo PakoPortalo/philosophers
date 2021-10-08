@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philo.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fportalo <fportalo@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/10/08 12:51:02 by fportalo          #+#    #+#             */
+/*   Updated: 2021/10/08 12:51:05 by fportalo         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PHILO_H
 # define PHILO_H
 # include <stdio.h>
@@ -16,7 +28,7 @@
 # define THINK		3
 # define DIE		4
 
-typedef struct	s_params {
+typedef struct s_params {
 	int					num;
 	uint64_t			die;
 	uint64_t			eat;
@@ -39,8 +51,6 @@ typedef struct s_philosopher {
 	uint64_t			last_eat;
 	int					*is_dead;
 	int					full;
-
-
 }				t_philosopher;
 
 int			arg_count(int argc);
@@ -53,7 +63,7 @@ uint64_t	get_time(void );
 void		*philo_routine(void *arg);
 uint64_t	get_time_sub(uint64_t subtraction);
 int			printer(t_philosopher *philo, int choose);
-
-
+void		alloc_memory(t_params *params);
+int			check_full(t_params *params, t_philosopher *philo);
 
 #endif

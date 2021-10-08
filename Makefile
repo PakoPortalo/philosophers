@@ -6,7 +6,7 @@
 #    By: fportalo <fportalo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/09/03 10:21:55 by fportalo          #+#    #+#              #
-#    Updated: 2021/09/30 16:39:15 by fportalo         ###   ########.fr        #
+#    Updated: 2021/10/08 12:47:05 by fportalo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,17 +15,19 @@ NAME = philo
 
 CC = gcc
 
-FLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror -g
 
 SRC = philo.c handle_parse.c philo_utils_1.c philo_utils_2.c threads.c routines.c
 
 OBJ = $(SRC:.c=.o)
 
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
 all: $(NAME)
 
-$(NAME):
-		@$(CC) $(FLAGS) -c $(SRC)
-		@$(CC) $(FLAGS) $(OBJ) -o $(NAME)
+$(NAME): $(OBJ)
+		$(CC) $(CFLAGS) $^ -o $@
 
 clean:
 		@rm -rf $(OBJ)
@@ -42,6 +44,6 @@ dead:
 	./philo 4 100 50 100
 
 normi:
-	norminette $(SRC)
+	norminette $(SRC) philo.h
 
 .PHONY: all clean fclean re
