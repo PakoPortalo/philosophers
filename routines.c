@@ -6,7 +6,7 @@
 /*   By: fportalo <fportalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/30 16:28:19 by fportalo          #+#    #+#             */
-/*   Updated: 2021/10/07 15:43:12 by fportalo         ###   ########.fr       */
+/*   Updated: 2021/10/08 11:25:49 by fportalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,25 +32,31 @@ void	eating_sub(t_philosopher *philo)
 
 int	eating(t_philosopher *philo)
 {
-	if (philo->params.num == 1)
+	if (philo->full == 0)
 	{
-		printer(philo, TAKEN);
-		ft_usleep(philo->params.die, philo);
-		*philo->is_dead = 1;
-		return (-1);
+		if (philo->params.num == 1)
+		{
+			printer(philo, TAKEN);
+			ft_usleep(philo->params.die, philo);
+			*philo->is_dead = 1;
+			return (-1);
+		}
+		eating_sub(philo);
+		if (philo->params.eat > philo->params.die)
+		{
+			ft_usleep((philo->params.die), philo);
+			*philo->is_dead = 1;
+			return (-1);
+		}
+		philo->last_eat = get_time();
+		printer(philo, EAT);
+		philo->params.num_eats--;
+		if (philo->params.num_eats == 0)
+			philo->full = 1;
+		ft_usleep(philo->params.eat, philo);
+		pthread_mutex_unlock(philo->stick_l);
+		pthread_mutex_unlock(philo->stick_r);
 	}
-	eating_sub(philo);
-	if (philo->params.eat > philo->params.die)
-	{
-		ft_usleep((philo->params.die), philo);
-		*philo->is_dead = 1;
-		return (-1);
-	}
-	philo->last_eat = get_time();
-	printer(philo, EAT);
-	ft_usleep(philo->params.eat, philo);
-	pthread_mutex_unlock(philo->stick_l);
-	pthread_mutex_unlock(philo->stick_r);
 	return (0);
 }
 
@@ -79,13 +85,15 @@ void	*philo_routine(void *arg)
 	philo = (t_philosopher *)arg;
 	if (philo->id % 2 == 1)
 		usleep(20);
-	while (*philo->is_dead == 0)
+	while (*philo->is_dead == 0 && philo->full == 0)
 	{
 		if (eating(philo) == -1)
 			return (NULL);
 		if (sleeping(philo) == -1)
 			return (NULL);
 		thinking(philo);
+		if (philo->full == 1)
+			return(NULL);
 	}
 	return (NULL);
 }

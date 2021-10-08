@@ -38,6 +38,8 @@ typedef struct s_philosopher {
 	uint64_t			*ini_start;
 	uint64_t			last_eat;
 	int					*is_dead;
+	int					full;
+
 
 }				t_philosopher;
 
